@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Coriago/feederpi/issues"
   },
-  "homepage": "https://github.com/Coriago/feederpi#readme"
+  "homepage": "https://github.com/Coriago/feederpi#readme",
+  "dependencies": {
+    "rpi-gpio": "^2.1.7"
+  }
 }
