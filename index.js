@@ -5,8 +5,6 @@ gpio.on('change', function(channel, value) {
 });
 gpio.setup(7, gpio.DIR_IN, gpio.EDGE_BOTH);
 
-gpio.setup(7, gpio.DIR_OUT, write);
-
 function write(err) {
     if (err) throw err;
     gpio.write(7, true, function(err) {
@@ -14,3 +12,5 @@ function write(err) {
         console.log('Written to pin');
     });
 }
+
+gpio.setup(7, gpio.DIR_OUT, write);
