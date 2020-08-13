@@ -9,7 +9,7 @@ function write(err) {
     gpio.write(7, true, function(err) {
         if (err) throw err;
         console.log('Written to pin');
-        gpio.Destroy();
+        gpio.destroy();
     });
 }
 
