@@ -1,16 +1,12 @@
-var gpio = require('rpi-gpio');
+const { MotorCotroller } = require('./motorController');
+const MotorController = require('./motorController');
 
-gpio.on('change', function(channel, value) {
-  console.log('Channel ' + channel + ' value is now ' + value);
-  gpio.destroy();
-});
+const step_pin = 0;
+const direction_pin = 0;
+const ms1_pin = 0;
+const ms2_pin = 0;
+const ms3_pin = 0;
 
-function write(err) {
-    if (err) throw err;
-    gpio.write(7, true, function(err) {
-        if (err) throw err;
-        console.log('Written to pin');
-    });
-}
+const motor = new MotorController(step_pin, direction_pin, ms1_pin, ms2_pin, ms3_pin);
 
-gpio.setup(7, gpio.DIR_OUT, gpio.EDGE_BOTH, write);
+motor.moveMotor(180, true, 1000);
