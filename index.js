@@ -1,7 +1,8 @@
 var gpio = require('rpi-gpio');
 
 gpio.on('change', function(channel, value) {
-	console.log('Channel ' + channel + ' value is now ' + value);
+  console.log('Channel ' + channel + ' value is now ' + value);
+  gpio.destroy();
 });
 
 function write(err) {
@@ -9,7 +10,6 @@ function write(err) {
     gpio.write(7, true, function(err) {
         if (err) throw err;
         console.log('Written to pin');
-        gpio.destroy();
     });
 }
 
