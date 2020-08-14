@@ -16,7 +16,9 @@ const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 console.log(`Writing to ${step_pin}`)
-gpio.setup(step_pin).then(() => {
-  gpio.write(step_pin, true).then(() => sleep(1000));
-  gpio.write(step_pin, false).then(() => sleep(1000));
+gpio.setup(step_pin, gpio.DIR_OUT).then(() => {
+  gpio.write(step_pin, true).then(async () => {
+    await sleep(1000);
+    gpio.write(step_pin, false).then(() => gpio.destroy());
+  });
 });
