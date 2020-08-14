@@ -12,13 +12,12 @@ const ms3_pin = 40;
 
 //motor.moveMotor(180, true, 1000);
 
-const sleep = (ms) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
+gpio.setup(7, gpio.DIR_OUT, write);
+
+function write(err) {
+    if (err) throw err;
+    gpio.write(7, true, function(err) {
+        if (err) throw err;
+        console.log('Written to pin');
+    });
 }
-console.log(`Writing to ${step_pin}`)
-gpio.setup(step_pin, gpio.DIR_OUT).then(() => {
-  gpio.write(step_pin, true).then(async () => {
-    await sleep(1000);
-    gpio.write(step_pin, false).then(() => gpio.destroy());
-  });
-});
