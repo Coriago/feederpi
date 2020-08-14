@@ -1,5 +1,4 @@
 const { MotorCotroller } = require('./motorController');
-const MotorController = require('./motorController');
 
 const step_pin = 18;
 const direction_pin = 16;
