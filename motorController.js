@@ -94,7 +94,7 @@ class MotorController {
     moveMotorComplex = async (steps, direction, delay, stepType) => {
         // Get Resolution
         const res = getResolution(stepType);
-        if(this.verbose) console.log(`Running motor with steps: ${steps} direction: ${direction} delay: ${delay} and step type ${stepType}`);
+        if (this.verbose) console.log(`Running motor with steps: ${steps} direction: ${direction} delay: ${delay} and step type ${stepType}`);
         try {
             // Set Pins
             const step_gpio = new Gpio(this.step_pin, 'out');
@@ -108,7 +108,7 @@ class MotorController {
             mode3_gpio.writeSync(res[2]);
 
             const cleanUp = () => {
-                if(this.verbose) {
+                if (this.verbose) {
                     console.log('Finished motor command exporting pins:');
                     this.printPins();
                 }
@@ -117,6 +117,7 @@ class MotorController {
                 mode1_gpio.unexport();
                 mode2_gpio.unexport();
                 mode3_gpio.unexport();
+                if (this.verbose) console.log('Finished clean up');
             }
 
             const step_act = async (count, value) => {
