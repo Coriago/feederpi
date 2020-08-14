@@ -9,4 +9,4 @@ const m3_pin = 22;
 
 
 const motor = new MotorController(step_pin, direction_pin, m1_pin, m2_pin, m3_pin, true);
-motor.moveMotor(180, 1, 1000);
+motor.moveMotor(180, 1, 3000);
