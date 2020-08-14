@@ -1,4 +1,4 @@
-const gpio = require('rpi-gpio').promise;
+var Gpio = require('onoff').Gpio;
 
 const INITIAL_DELAY = 50;
 const DEGREE_PER_STEP = 1.8;
@@ -79,6 +79,10 @@ class MotorController {
         await this.moveMotorComplex(steps, direction, delay, stepType);
     }
 
+    printStatus = (stepCount) => {
+        
+    }
+
     /**
      * Moves the motor using more complex params
      * @param {int} steps 
@@ -89,37 +93,45 @@ class MotorController {
     moveMotorComplex = async (steps, direction, delay, stepType) => {
         // Get Resolution
         const res = getResolution(stepType);
+        if(this.verbose) console.log(`Running motor with steps: ${steps} direction: ${direction} delay: ${delay} and step type ${stepType}`);
 
         // Set Pins
         try{
-            await gpio.setup(this.step_pin);
-            if(res[0]) await gpio.setup(this.Mode_pin1, gpio.DIR_HIGH);
-            if(res[1]) await gpio.setup(this.Mode_pin2, gpio.DIR_HIGH);
-            if(res[2]) await gpio.setup(this.Mode_pin3, gpio.DIR_HIGH);
-            if (direction) await gpio.setup(this.direction_pin, gpio.DIR_HIGH);
+            const step_gpio = new Gpio(this.step_pin, 'out');
+            const direction_gpio = new Gpio(this.direction_pin, 'out');
+            const mode1_gpio = new Gpio(this.Mode_pin1, 'out');
+            const mode2_gpio = new Gpio(this.Mode_pin2, 'out');
+            const mode3_gpio = new Gpio(this.Mode_pin3, 'out');
+            direction_gpio.writeSync(direction);
+            mode1_gpio.writeSync(res[0]);
+            mode2_gpio.writeSync(res[1]);
+            mode3_gpio.writeSync(res[2]);
         } catch(err) {
             console.log('Failed to setup GPIO');
-            await gpio.destroy();
             throw err;
+        }
+
+        const cleanUp = () => {
+            if(this.verbose) console.log(`Finished motor command exporting pins: ${this.step_pin}${this.direction_pin}${this.Mode_pin1}${this.Mode_pin2}${this.Mode_pin3}`);
+            step_gpio.unexport();
+            direction_gpio.unexport();
+            mode1_gpio.unexport();
+            mode2_gpio.unexport();
+            mode3_gpio.unexport();
+        }
+
+        const step_act = (count, value) => {
+            count++;
+            if(this.verbose) console.log(`Step: ${count}`);
+            if (count == steps) cleanUp();
+            await sleep(delay);
+            step_gpio.write(value).then(() => step_act(count, value ^ 1));
         }
 
         // Initial Sleep
         await sleep(INITIAL_DELAY);
-
         // Perform Steps
-        try{
-            for(let i = 0; i < steps; i++) {
-                gpio.write(this.step_pin, true).then(() => sleep(delay));
-                gpio.write(this.step_pin, false).then(() => sleep(delay));
-            }
-        } catch(err) {
-            console.log('Failed to perform steps');
-            gpio.destroy();
-            throw err;
-        }
-
-        // Clean up
-        await gpio.destroy();
+        step_act(0,0);
     }
 }
 
