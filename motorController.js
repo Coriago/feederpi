@@ -39,6 +39,7 @@ class MotorController {
         this.Mode_pin2 = Mode_pin2;
         this.Mode_pin3 = Mode_pin3;
         this.verbose = verbose;
+        if(this.verbose) this.printPins();
     }
 
     /**
@@ -79,8 +80,8 @@ class MotorController {
         await this.moveMotorComplex(steps, direction, delay, stepType);
     }
 
-    printStatus = (stepCount) => {
-        
+    printPins = () => {
+        console.log(`Step Pin: ${this.step_pin}\nDirection Pin: ${this.direction_pin}\nMode 1 Pin: ${this.Mode_pin1}\nMode 2 Pin: ${this.Mode_pin2}\nMode 3 Pin: ${this.Mode_pin3}`)
     }
 
     /**
@@ -112,7 +113,10 @@ class MotorController {
         }
 
         const cleanUp = () => {
-            if(this.verbose) console.log(`Finished motor command exporting pins: ${this.step_pin}${this.direction_pin}${this.Mode_pin1}${this.Mode_pin2}${this.Mode_pin3}`);
+            if(this.verbose) {
+                console.log('Finished motor command exporting pins:');
+                this.printPins();
+            }
             step_gpio.unexport();
             direction_gpio.unexport();
             mode1_gpio.unexport();
@@ -120,7 +124,7 @@ class MotorController {
             mode3_gpio.unexport();
         }
 
-        const step_act = (count, value) => {
+        const step_act = async (count, value) => {
             count++;
             if(this.verbose) console.log(`Step: ${count}`);
             if (count == steps) cleanUp();
