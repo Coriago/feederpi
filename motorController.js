@@ -95,42 +95,48 @@ class MotorController {
         // Get Resolution
         const res = getResolution(stepType);
         if(this.verbose) console.log(`Running motor with steps: ${steps} direction: ${direction} delay: ${delay} and step type ${stepType}`);
+        try {
+            // Set Pins
+            const step_gpio = new Gpio(this.step_pin, 'out');
+            const direction_gpio = new Gpio(this.direction_pin, 'out');
+            const mode1_gpio = new Gpio(this.Mode_pin1, 'out');
+            const mode2_gpio = new Gpio(this.Mode_pin2, 'out');
+            const mode3_gpio = new Gpio(this.Mode_pin3, 'out');
+            direction_gpio.writeSync(direction);
+            mode1_gpio.writeSync(res[0]);
+            mode2_gpio.writeSync(res[1]);
+            mode3_gpio.writeSync(res[2]);
 
-        // Set Pins
-        const step_gpio = new Gpio(this.step_pin, 'out');
-        const direction_gpio = new Gpio(this.direction_pin, 'out');
-        const mode1_gpio = new Gpio(this.Mode_pin1, 'out');
-        const mode2_gpio = new Gpio(this.Mode_pin2, 'out');
-        const mode3_gpio = new Gpio(this.Mode_pin3, 'out');
-        direction_gpio.writeSync(direction);
-        mode1_gpio.writeSync(res[0]);
-        mode2_gpio.writeSync(res[1]);
-        mode3_gpio.writeSync(res[2]);
-
-        const cleanUp = () => {
-            if(this.verbose) {
-                console.log('Finished motor command exporting pins:');
-                this.printPins();
+            const cleanUp = () => {
+                if(this.verbose) {
+                    console.log('Finished motor command exporting pins:');
+                    this.printPins();
+                }
+                step_gpio.unexport();
+                direction_gpio.unexport();
+                mode1_gpio.unexport();
+                mode2_gpio.unexport();
+                mode3_gpio.unexport();
             }
-            step_gpio.unexport();
-            direction_gpio.unexport();
-            mode1_gpio.unexport();
-            mode2_gpio.unexport();
-            mode3_gpio.unexport();
-        }
 
-        const step_act = async (count, value) => {
-            count++;
-            if(this.verbose) console.log(`Step: ${count}`);
-            if (count == steps) cleanUp();
-            await sleep(delay);
-            step_gpio.write(value).then(() => step_act(count, value ^ 1));
-        }
+            const step_act = async (count, value) => {
+                count++;
+                if(this.verbose) console.log(`Step: ${count}`);
+                if (count == steps) cleanUp();
+                await sleep(delay);
+                step_gpio.write(value).then(() => step_act(count, value ^ 1));
+            }
 
-        // Initial Sleep
-        await sleep(INITIAL_DELAY);
-        // Perform Steps
-        step_act(0,0);
+            // Initial Sleep
+            await sleep(INITIAL_DELAY);
+            // Perform Steps
+            step_act(0,0);
+
+        } catch (err) {
+            console.log('Failure while running trying to run motor');
+            console.log(err);
+            throw err;
+        }
     }
 }
 
