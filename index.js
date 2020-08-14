@@ -17,6 +17,6 @@ const sleep = (ms) => {
 }
 console.log(`Writing to ${step_pin}`)
 gpio.setup(step_pin).then(() => {
-  gpio.write(step_pin, true).then(() => sleep(delay));
-  gpio.write(step_pin, false).then(() => sleep(delay));
+  gpio.write(step_pin, true).then(() => sleep(1000));
+  gpio.write(step_pin, false).then(() => sleep(1000));
 });
