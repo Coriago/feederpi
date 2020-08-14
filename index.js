@@ -11,7 +11,7 @@ const ms3_pin = 40;
 
 
 
-const Gpio = require('../onoff').Gpio; // Gpio class
+const Gpio = require('onoff').Gpio; // Gpio class
 const led = new Gpio(17, 'out');       // Export GPIO17 as an output
 let stopBlinking = false;
  
