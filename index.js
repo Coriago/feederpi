@@ -1,7 +1,8 @@
 const MotorController = require('./motorController');
 
-const step_pin = 4;
-const direction_pin = 23;
+const step_pin = 14;
+
+const direction_pin = 15;
 const m1_pin = 17;
 const m2_pin = 27;
 const m3_pin = 22;
