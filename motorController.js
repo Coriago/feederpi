@@ -123,9 +123,9 @@ class MotorController {
             const step_act = async (count, value) => {
                 count++;
                 if(this.verbose) console.log(`Step: ${count}`);
-                if (count == steps) return true;
+                if (count == steps) return;
                 await sleep(delay);
-                step_gpio.write(value).then(() => step_act(count, value ^ 1));
+                await step_gpio.write(value).then(() => step_act(count, value ^ 1));
             }
 
             // Initial Sleep
