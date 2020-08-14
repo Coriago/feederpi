@@ -131,7 +131,7 @@ class MotorController {
             // Initial Sleep
             await sleep(INITIAL_DELAY);
             // Perform Steps
-            step_act(0,0);
+            await step_act(0,0);
 
         } catch (err) {
             console.log('Failure while running trying to run motor');
