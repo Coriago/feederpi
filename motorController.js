@@ -97,20 +97,15 @@ class MotorController {
         if(this.verbose) console.log(`Running motor with steps: ${steps} direction: ${direction} delay: ${delay} and step type ${stepType}`);
 
         // Set Pins
-        try{
-            const step_gpio = new Gpio(this.step_pin, 'out');
-            const direction_gpio = new Gpio(this.direction_pin, 'out');
-            const mode1_gpio = new Gpio(this.Mode_pin1, 'out');
-            const mode2_gpio = new Gpio(this.Mode_pin2, 'out');
-            const mode3_gpio = new Gpio(this.Mode_pin3, 'out');
-            direction_gpio.writeSync(direction);
-            mode1_gpio.writeSync(res[0]);
-            mode2_gpio.writeSync(res[1]);
-            mode3_gpio.writeSync(res[2]);
-        } catch(err) {
-            console.log('Failed to setup GPIO');
-            throw err;
-        }
+        const step_gpio = new Gpio(this.step_pin, 'out');
+        const direction_gpio = new Gpio(this.direction_pin, 'out');
+        const mode1_gpio = new Gpio(this.Mode_pin1, 'out');
+        const mode2_gpio = new Gpio(this.Mode_pin2, 'out');
+        const mode3_gpio = new Gpio(this.Mode_pin3, 'out');
+        direction_gpio.writeSync(direction);
+        mode1_gpio.writeSync(res[0]);
+        mode2_gpio.writeSync(res[1]);
+        mode3_gpio.writeSync(res[2]);
 
         const cleanUp = () => {
             if(this.verbose) {
