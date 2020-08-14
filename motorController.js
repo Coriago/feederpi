@@ -123,7 +123,7 @@ class MotorController {
             const step_act = async (count, value) => {
                 count++;
                 if(this.verbose) console.log(`Step: ${count}`);
-                if (count == steps) cleanUp();
+                if (count == steps) return true;
                 await sleep(delay);
                 step_gpio.write(value).then(() => step_act(count, value ^ 1));
             }
@@ -132,6 +132,7 @@ class MotorController {
             await sleep(INITIAL_DELAY);
             // Perform Steps
             await step_act(0,0);
+            await cleanUp();
 
         } catch (err) {
             console.log('Failure while running trying to run motor');
