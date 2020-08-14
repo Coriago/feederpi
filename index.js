@@ -15,8 +15,8 @@ const ms3_pin = 40;
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-gpio.setup(this.step_pin).then(() => {
-  gpio.write(this.step_pin, true).then(() => sleep(delay));
-  gpio.write(this.step_pin, false).then(() => sleep(delay));
+console.log(`Writing to ${step_pin}`)
+gpio.setup(step_pin).then(() => {
+  gpio.write(step_pin, true).then(() => sleep(delay));
+  gpio.write(step_pin, false).then(() => sleep(delay));
 });
