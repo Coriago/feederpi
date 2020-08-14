@@ -8,7 +8,7 @@ const MAX_RPM = 60;
 
 const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}
 
 const getResolution = (type) => {
     const resolutions = {
