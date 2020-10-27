@@ -1,7 +1,7 @@
 var Gpio = require('onoff').Gpio;
 
 const INITIAL_DELAY = 50;
-const DEGREE_PER_STEP = 1.8;
+const DEGREE_PER_STEP = 0.9;
 const DEGREES_PER_REV = 360;
 const MS_PER_MIN = 60000;
 const MAX_RPM = 80;
